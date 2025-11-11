@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Codice Fiscale</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #718096;
+            text-align: center;
+            margin: 0 0 2rem 0;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="radio"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-label {
+            color: #718096;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .codice-fiscale {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .codice-fiscale {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+        }
+    </style>
+    <script src="/_sdk/element_sdk.js"></script>
+    <style>@view-transition { navigation: auto; }</style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+</head>
+<body>
+<div class="container">
+    <h1 id="pageTitle">Calcolatore Codice Fiscale</h1>
+    <p class="subtitle" id="subtitle">Inserisci i tuoi dati per generare il codice fiscale</p>
+    
+    <form id="cfForm">
+        <div class="form-group">
+            <label for="cognome">Cognome</label>
+            <input type="text" id="cognome" name="cognome" required>
+        </div>
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+            <label>Sesso</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="maschio" name="sesso" value="M" required>
+                    <label for="maschio">Maschio</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="femmina" name="sesso" value="F" required>
+                    <label for="femmina">Femmina</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="dataNascita">Data di Nascita</label>
+            <input type="date" id="dataNascita" name="data_nascita" required>
+        </div>
+        <div class="form-group">
+            <label for="comune">Comune di Nascita (Area Flegrea)</label>
+            <select id="comune" name="comune" required>
+                <option value="">Seleziona un comune</option>
+                <option value="F839">Napoli</option>
+                <option value="G964">Pozzuoli</option>
+                <option value="A535">Bacoli</option> <option value="F482">Monte di Procida</option> <option value="H114">Quarto</option> </select>
+        </div>
+        <button type="submit" class="btn-calculate" id="buttonText">Calcola Codice Fiscale</button>
+    </form>
+    
+    <div class="result-container" id="resultContainer">
+        <div class="result-label">
+            Il tuo Codice Fiscale è:
+        </div>
+        <div class="codice-fiscale" id="codiceFiscale"></div>
+    </div>
+</div>
+
+<script>
+    // --- SCRIPT MODIFICATO ---
+    // Tutta la logica di calcolo è stata rimossa.
+    // Ora gestiamo solo la chiamata al backend.
+
+    document.getElementById('cfForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Impedisce l'invio tradizionale del form
+        
+        const form = e.target;
+        const formData = new FormData(form); // Raccoglie tutti i dati del form
+        const resultContainer = document.getElementById('resultContainer');
+        const cfElement = document.getElementById('codiceFiscale');
+        const button = document.getElementById('buttonText');
+
+        // Stato di caricamento
+        button.textContent = 'Calcolo in corso...';
+        button.disabled = true;
+        resultContainer.classList.remove('show');
+
+        try {
+            // Chiamata asincrona al backend PHP
+            const response = await fetch('calcola.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            // Aspetta la risposta JSON
+            const data = await response.json();
+
+            // Mostra i risultati
+            if (data.success) {
+                cfElement.textContent = data.codice_fiscale;
+                cfElement.style.color = "#667eea"; // Colore di successo
+            } else {
+                // Mostra un errore se il PHP lo restituisce
+                cfElement.textContent = 'Errore: ' + data.error;
+                cfElement.style.color = "#e53e3e"; // Colore di errore
+            }
+            
+            resultContainer.classList.add('show');
+
+        } catch (error) {
+            // Gestisce errori di rete o di connessione
+            console.error('Errore nella chiamata fetch:', error);
+            cfElement.textContent = 'Errore di connessione.';
+            cfElement.style.color = "#e53e3e";
+            resultContainer.classList.add('show');
+        } finally {
+            // Ripristina il bottone
+            button.textContent = 'Calcola Codice Fiscale';
+            button.disabled = false;
+        }
+    });
+
+
+    // --- Il tuo codice SDK e di configurazione (lasciato intatto) ---
+    const defaultConfig = {
+        page_title: "Calcolatore Codice Fiscale",
+        subtitle: "Inserisci i tuoi dati per generare il codice fiscale",
+        button_text: "Calcola Codice Fiscale",
+        background_color: "#667eea",
+        card_color: "#ffffff",
+        text_color: "#2d3748",
+        button_color: "#667eea",
+        accent_color: "#764ba2",
+        font_family: "Segoe UI",
+        font_size: 16
+    };
+    
+    async function onConfigChange(config) {
+        const baseSize = config.font_size || defaultConfig.font_size;
+        const customFont = config.font_family || defaultConfig.font_family;
+        const baseFontStack = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+        
+        document.getElementById('pageTitle').textContent = config.page_title || defaultConfig.page_title;
+        document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+        document.getElementById('buttonText').textContent = config.button_text || defaultConfig.button_text;
+        
+        document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
+        document.querySelector('.container').style.background = config.card_color || defaultConfig.card_color;
+        document.querySelector('h1').style.color = config.text_color || defaultConfig.text_color;
+        document.querySelector('.btn-calculate').style.background = `linear-gradient(135deg, ${config.button_color || defaultConfig.button_color} 0%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
+        
+        document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        document.querySelector('h1').style.fontSize = `${baseSize * 2}px`;
+        document.querySelector('.subtitle').style.fontSize = `${baseSize}px`;
+        document.querySelectorAll('label').forEach(label => {
+            label.style.fontSize = `${baseSize * 0.95}px`;
+        });
+        document.querySelectorAll('input, select').forEach(input => {
+            input.style.fontSize = `${baseSize}px`;
+        });
+        document.querySelector('.btn-calculate').style.fontSize = `${baseSize * 1.1}px`;
+    }
+
+    if (window.elementSdk) {
+        window.elementSdk.init({
+            defaultConfig,
+            onConfigChange,
+            mapToCapabilities: (config) => ({
+                recolorables: [
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            config.background_color = value;
+                            window.elementSdk.setConfig({ background_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.card_color || defaultConfig.card_color,
+                        set: (value) => {
+                            config.card_color = value;
+                            window.elementSdk.setConfig({ card_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            config.text_color = value;
+                            window.elementSdk.setConfig({ text_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.button_color || defaultConfig.button_color,
+                        set: (value) => {
+                            config.button_color = value;
+                            window.elementSdk.setConfig({ button_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.accent_color || defaultConfig.accent_color,
+                        set: (value) => {
+                            config.accent_color = value;
+                            window.elementSdk.setConfig({ accent_color: value });
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || defaultConfig.font_family,
+                    set: (value) => {
+                        config.font_family = value;
+                        window.elementSdk.setConfig({ font_family: value });
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || defaultConfig.font_size,
+                    set: (value) => {
+                        config.font_size = value;
+                        window.elementSdk.setConfig({ font_size: value });
+                    }
+                }
+            }),
+            mapToEditPanelValues: (config) => new Map([
+                ["page_title", config.page_title || defaultConfig.page_title],
+                ["subtitle", config.subtitle || defaultConfig.subtitle],
+                ["button_text", config.button_text || defaultConfig.button_text]
+            ])
+        });
+    }
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99cc3a5f0482f373',t:'MTc2Mjg0NzczMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
